@@ -1,7 +1,17 @@
-site_name: MkLorum
+site_name: MkDocs Example
 site_url: https://example.com/
+site_description: >-
+  Create a branded static site from a set of Markdown files to host the
+  documentation of your Open Source or commercial project
 theme:
   name: material
+  features:
+    - navigation.tabs
+    - navigation.tracking
+    - navigation.sections
+    - toc.follow
+
+
 markdown_extensions:
 
   # Python Markdown
@@ -35,4 +45,26 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+
+font:
+    text: Roboto
+    code: Roboto Mono
+
+# Customization
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/squidfunk
+    - icon: fontawesome/brands/gitter
+      link: https://gitter.im/squidfunk/mkdocs-material
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/squidfunk/mkdocs-material/
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/mkdocs-material/
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/squidfunk
+
+# Page tree
+nav:
+  - Home: index.md
 
