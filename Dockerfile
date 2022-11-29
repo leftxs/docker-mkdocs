@@ -1,32 +1,53 @@
 FROM python:3.11-alpine3.16
 
-# Set build directory
-WORKDIR /tmp
+ENV PYTHONUNBUFFERED=1
 
-# Copy files necessary for build
-# COPY material material
-# COPY MANIFEST.in MANIFEST.in
-# COPY package.json package.json
-# COPY README.md README.md
-COPY requirements.txt requirements.txt
-# COPY setup.py setup.py
+# Create non root user
+RUN adduser -D leftxs
+
+# Create dirs and set permissions to non root user
+RUN mkdir /docs
+RUN chown -R leftxs:leftxs /docs
 
 # Perform build and cleanup artifacts
 RUN apk add --no-cache \
-    git curl \
+    git curl bash \
     && apk add --no-cache --virtual .build gcc musl-dev \
-    && pip install --user -r requirements.txt \
-    && apk del .build gcc musl-dev \
+    && pip install --upgrade pip
+
+# Set build directory
+WORKDIR /tmp
+
+# Copy requirements.txt
+COPY --chown=leftxs:leftxs requirements.txt requirements.txt
+
+# Copy files necessary for build
+
+#COPY requirements.txt requirements.txt
+
+USER leftxs
+RUN pip install --user -r requirements.txt
+
+USER root
+RUN apk del .build gcc musl-dev \
     && rm -rf /tmp/*
 
-ENV PATH=$PATH:/root/.local/bin
-# Set working directory
+USER leftxs
 
+ENV PATH="/home/leftxs/.local/bin:${PATH}"
+
+#ENV PATH=$PATH:/root/.local/bin
+
+# Trust git directory, required for git >= 2.35.2
+RUN git config --global --add safe.directory /docs
+
+# Set working directory
 WORKDIR /docs
 
 # Expose MkDocs development server port
 EXPOSE 8000
 
 # Start development server by default
-ENTRYPOINT ["mkdocs"]
-CMD ["serve", "--dev-addr=0.0.0.0:8000"]
+#ENTRYPOINT ["mkdocs"]
+#CMD ["serve", "--dev-addr=0.0.0.0:8000"]
+ENTRYPOINT ["bash"]
