@@ -24,8 +24,8 @@ build-image: ## Build docker image
 
 .PHONY: serve
 serve: ## Start in development (serve) mode
-	docker run --rm -it -p 8000:8000 -v ${PWD}:/docs $(NAME)
+	docker run --rm -it -p 8000:8000 -v ${PWD}/website:/docs $(NAME)
 
 .PHONY: build-docs
 build-docs: ## Build docs
-	docker run --rm -it -p 8000:8000 -v ${PWD}:/docs $(NAME) build
+	docker run --rm -it -p 8000:8000 -v ${PWD}/website:/docs $(NAME) build
